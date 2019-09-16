@@ -52,7 +52,6 @@ var (
 
 func main() {
 	port := os.Getenv("PORT")
-	fmt.Println(Token)
 	discordInit()
 	http.ListenAndServe(":"+port, nil)
 }
