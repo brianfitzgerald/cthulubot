@@ -51,9 +51,7 @@ var (
 )
 
 func main() {
-	port := os.Getenv("PORT")
 	discordInit()
-	http.ListenAndServe(":"+port, nil)
 }
 
 func askQuestion(message string) string {
@@ -87,7 +85,11 @@ func discordInit() {
 		return
 	}
 
+	port := os.Getenv("PORT")
+
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
+	http.ListenAndServe(":"+port, nil)
+
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
