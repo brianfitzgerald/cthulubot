@@ -12,12 +12,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// This function will be called (due to AddHandler above) every time a new
-// message is created on any channel that the autenticated bot has access to.
 func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 
-	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
@@ -46,9 +42,8 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 }
 
-// Variables used for command line parameters
 var (
-	Token            = "NjIzMjMzOTY5NTU0NzE4NzIx.XX_fRg.RHT2V2LRl8nyhIr2M5Bnp3Gd-lw"
+	Token            = os.Getenv("DISCORD_BOT_TOKEN")
 	useDiscord       = true
 	botUserID        = "623233969554718721"
 	generalChannelID = "559867622439518227"
@@ -81,23 +76,19 @@ func discordInit() {
 		return
 	}
 
-	// Register the messageCreate func as a callback for MessageCreate events.
 	dg.AddHandler(messageCreate)
 
-	// Open a websocket connection to Discord and begin listening.
 	err = dg.Open()
 	if err != nil {
 		fmt.Println("error opening connection,", err)
 		return
 	}
 
-	// Wait here until CTRL-C or other term signal is received.
 	fmt.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
-	// Cleanly close down the Discord session.
 	dg.Close()
 
 }
