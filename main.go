@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"net/http"
 	"os"
 	"os/signal"
 	"strings"
@@ -50,7 +51,9 @@ var (
 )
 
 func main() {
+	port := os.Getenv("PORT")
 	discordInit()
+	http.ListenAndServe(":"+port, nil)
 }
 
 func askQuestion(message string) string {
